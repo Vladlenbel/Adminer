@@ -1,0 +1,270 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Админка</title>
+    <link rel="stylesheet" type="text/css" href="stylerMain.css"/>
+     <style>
+  
+  </style>
+</head>
+<body>
+
+	<form >
+	
+	<font size="5" color="black" face="Arial">Добавить/изменить работника</font>
+
+
+    			<div class ="surn">
+					Введите фамилию сотрудника:
+					</div>
+				<div class ="surnINP">     
+					<input type="userSurname" name="userSurname" required>
+				</div>
+				
+				<div class = "name" >
+					Введите имя сотрудника:
+					</div>
+					<div class = "nameINP" >
+					 <input type="userName" name="userName" required>
+				</div>
+
+				<div class = "patron">
+					Введите отчество сотрудника:
+					</div> 
+					<div class = "patronINP">
+					<input type="userPatronomic" name="userPatronomic" required>
+				</div>
+
+    
+    			<div class = "workerId"  >
+					Введите id сотрудника: 
+					</div>
+					<div class = "workerIdINP"  >
+					<input type="workId" name="workId" required>
+				</div>	
+				
+				<div class = "tablenum">
+					Введите табельный номер: 
+					</div>
+					<div class = "tablenumINP">
+					<input type="tableNumber" name="tableNumber" required>
+				</div>
+
+				<div class = "depart" >
+					Введите отдел сотрудника:
+					</div> 
+					<div class = "departINP" >
+					<input type="departament" name="departament" required>
+				</div>
+				
+				<div class = "position" >
+					Введите должность сотрудника:
+					</div> 
+					<div class = "positionINP" >
+					<input type="position" name="position" required>
+				</div>
+				
+				<div class = "birth"  >
+					Введите день рождения:
+					</div>
+					<div class = "birthINP"  >
+					 <input type="birthday" name="birthday" required>
+				</div>
+
+				<div class = "sound" >
+					Введите звук входа сотрудника:
+					</div>
+					<div class = "soundINP" >
+					 <input type="sound" name="sound">
+				</div>
+				
+				<div class = "status" >
+					Введите статус сотрудника:
+					</div>
+					<div class = "statusINP" >
+					<select size="1"  id="status" required>
+    					<option disabled selected>Выберите статус</option>
+    					<option value="work">Работает</option>
+    					<option value="dismissed">Уволен</option>
+   					</select>
+				</div>
+				
+				<div class = "typeWorkingHour" >
+					Введите тип рабочего времени:
+				</div>
+				<div class = "typeWorkingHourINP" >
+					 <input type="typeWorkingHour" name="typeWorkingHour">
+				</div>
+				
+				<div class = "idInTablePre" >
+					Для изменения информации о работнике введите id
+				</div>
+				<div class = "idInTable" >
+				 Введите id записи:
+				</div>
+				<div class = "idInTableINP" >
+					 <input type="id" name="idInTable">
+				</div>
+		
+						
+				 <div class = "layer2">
+					<input  type="button"  id= "addWorkBut" value="Добавить работника" /> 
+				</div>
+				
+				<div class = "layer4">
+					<input  type="button"  id= "showTable" value="Вывести таблицу работников" /> 
+				</div>
+				
+				<div class = "layer6">
+					<input  type="button"  id= "editWorker" value="Изменить информацию о работнике" /> 
+				</div>
+				
+	<div class = "departEdit">				
+		<font size="5" color="black" face="Arial">Добавить/изменить отдел</font>				
+	</div>
+	
+			<div class ="nameDep">
+					Введите название отдела:
+					</div>
+				<div class ="nameDepINP">     
+					<input type="nameDepart" name="nameDepart">
+				</div>
+				
+				<div class = "typeWorkTime" >
+					Введите тип рабочего времени:
+					</div>
+					<div class = "typeWorkTimeINP" >
+					 <input type="typeWorkTimeDepart" name="typeWorkTimeDepart">
+				</div>
+				
+				<div class = "idDeparInTablePre" >
+					Для изменения информации об отделе введите id
+				</div>
+				<div class = "idDeparInTable" >
+				 Введите id записи:
+				</div>
+				<div class = "idDeparInTableINP" >
+					 <input type="id" name="idDepInTable">
+				</div>
+				
+				<div class = "addDepBut">
+					<input  type="button"  id= "addDepBut" value="     Добавить отдел      " /> 
+				</div>
+				
+				<div class = "showTableDepar">
+					<input  type="button"  id= "showTableDepar" value="Вывести таблицу отделов и типы рабочего времени" /> 
+				</div>
+				
+				<div class = "editDeparInfo">
+					<input  type="button"  id= "editDeparInfo" value="Изменить информацию об отделе" /> 
+				</div>
+				
+				
+	<div class = "workHourEdit">				
+		<font size="5" color="black" face="Arial">Добавить/изменить тип рабочего </font>				
+	</div>
+	<div class = "workHourEditDop">				
+		<font size="5" color="black" face="Arial"> времени</font>				
+	</div>
+	
+			<div class ="startWorkHour">
+					Введите начало рабочего дня:
+					</div>
+				<div class ="startWorkHourINP">     
+					<input type="startWorkHour" name="startWorkHour">
+				</div>
+				
+				<div class = "finishWorkHour" >
+					Введите конец рабочего дня:
+				</div>
+				<div class = "finishWorkHourINP" >
+					 <input type="finishWorkHour" name="finishWorkHour">
+				</div>
+				
+				<div class ="dinnerStart">
+					Введите начало обеда:
+					</div>
+				<div class ="dinnerStartINP">     
+					<input type="dinnerStart" name="dinnerStart">
+				</div>
+				
+				<div class = "dinnerFinish" >
+					Введите конец обеда:
+					</div>
+					<div class = "dinnerFinishINP" >
+					 <input type="dinnerFinish" name="dinnerFinish">
+				</div>
+				
+				<div class = "idWorkHourInTablePre" >
+					Для изменения информации о типе рабочего времени 
+				</div>
+				<div class = "idWorkHourInTable" >
+				 введите id записи:
+				</div>
+				<div class = "idWorkHourInTableINP" >
+					 <input type="id" name="idWorkHourInTable">
+				</div>
+				
+				<div class = "addWorkHourBut">
+					<input  type="button"  id= "addWorkHourBut" value="Добавить тип рабочего времени" /> 
+				</div>
+				
+				<div class = "showTableWorkHour">
+					<input  type="button"  id= "showTableWorkHour" value="Вывести таблицу типов рабочего времени" /> 
+				</div>
+				
+				<div class = "editWorkHourInfo">
+					<input  type="button"  id= "editWorkHourInfo" value="Изменить информацию о рабочем времени" /> 
+				</div>	
+				
+				
+	<div class = "authorEdit">				
+		<font size="5" color="black" face="Arial">Добавить/изменить пользователя</font>				
+	</div>
+	
+			<div class ="nameAuthor">
+					Введите логин пользователя:
+					</div>
+				<div class ="nameAuthorINP">     
+					<input type="nameAuthor" name="nameAuthor">
+				</div>
+				
+				<div class = "paswordAuthor" >
+					Введите пароль пользователя:
+					</div>
+					<div class = "paswordAuthorINP" >
+					 <input type="paswordAuthor" name="paswordAuthor">
+				</div>
+				
+				<div class = "roleUserAuthor" >
+					Введите роль пользователя:
+				</div>
+				<div class = "roleUserAuthorINP" >
+					 <input type="id" name="roleUserAuthor">
+				</div>	
+				
+				<div class = "addAuthorBut">
+					<input  type="button"  id= "addAuthorBut" value="Добавить пользователя" /> 
+				</div>	
+				<div class = "showTableAuthor">
+					<input  type="button"  id= "showTableAuthor" value="Вывести таблицу пользователей" /> 
+				</div>
+				
+				<div class = "editAuthorInfo">
+					<input  type="button"  id= "editAuthorInfo" value="Изменить информацию о пользователе" /> 
+				</div>		
+				
+								
+				
+				
+				
+	<div class = "layer5" id = "result"></div>
+	<script src="ajax.js"></script>
+	
+	</form>
+	
+	
+
+</body>
+</html>

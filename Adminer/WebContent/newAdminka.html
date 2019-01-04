@@ -1,0 +1,875 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Админка</title>
+<link rel="stylesheet" type="text/css" href="stylerMain.css"/>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Select2 JQuery Plugin">
+    <meta name="author" content="Igor Vaynberg">
+
+    <link href="bootstrap/css/bootstrap.css" rel="stylesheet"/>
+    <link href="prettify/prettify.css" rel="stylesheet"/>
+    
+ 
+
+
+    <!--[if lt IE 9]>
+      <script src="js/html5shim.js"></script>
+    <![endif]-->
+
+      
+      <script src="js/jquery-1.7.1.min.js"></script>
+      <script src="js/jquery-ui-1.8.20.custom.min.js"></script> <!-- for sortable example -->
+      <script src="js/jquery.mousewheel.js"></script>
+      <script src="prettify/prettify.min.js"></script>
+      <script src="bootstrap/js/bootstrap.min.js"></script>
+
+
+
+<!-- базовое теги -->
+    
+</head>
+
+   <link href="select2-3.5.3/select2.css?ts=2015-08-29T20%3A09%3A48%2B00%3A00" rel="stylesheet"/>
+<script src="select2-3.5.3/select2.js?ts=2015-08-29T20%3A09%3A48%2B00%3A00"></script>
+
+<script type="text/javascript">
+function getLastName(params){
+	//var params = 'info=' + 'getLastName';
+	var request = new XMLHttpRequest();
+	var texts = 0;
+	//console.log(1);
+	
+	request.open('POST', 'DBDownloder',false);
+	request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	request.send(params);
+	//console.log(3);
+	return request;
+ }
+	 
+	 
+ function getRequest(request){
+	 var id = 0;
+	 while(request.readyState != 4 ){ 
+		 //console.log(request.readyState);
+		 id++;
+		 if (id>100){
+			 break;
+		 }
+	 }
+	 //console.log(request.responseText);
+	 return request.responseText ;
+/*		request.onreadystatechange = function(){
+			console.log(4);
+				/*if((request.readyState == 4) && (request.status ==200)){
+					texts = request.responseText;
+					console.log(5);
+				}
+				if (texts != 0 ){
+					console.log(texts);
+					return texts;
+				}
+				console.log(6);
+		}
+	 
+	/*if (texts != 0 ){
+	console.log(texts);
+	return texts;
+}*/
+	
+
+}
+
+</script>
+<script id="userSurnameScr">
+ 
+
+$(document).ready(function() {
+	var params = 'info=' + 'getLastName';
+	var text = [];
+	var requests = getLastName(params);
+	
+	text = getRequest(requests).split(',');
+	var id = 0;
+	
+	var object ={};
+	var array =[];
+	
+	for(var i = 0; i< text.length; i++){
+	 object = {
+				id: text[i],
+				text: text[i]
+		}
+		array.push(object);
+	}
+	
+	var kol = 0;
+	$("#userSurname").select2({
+	   // minimumInputLength: 1,
+	    placeholder: "Фамилия",
+		  allowClear: true,  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	            data.results.push({id: query.term, text: query.term,});
+	            kol = query.term;
+	            var s = 0;
+	           // console.log(data);
+	            for(var j = 0; j< array.length; j++){
+	            	if (query.term.toLowerCase() == array[j].text.substring(0, kol.length).toLowerCase() ){
+	            		var temp = array[s];
+	            		array[s] = array[j];
+	            		array[j] = temp;
+	            		s++;
+	            	}
+	            }
+	            
+	            for(var j = 0; j< array.length; j++){	            	
+	            	data.results.push(array[j]);
+	            }
+	                  
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+/*	$('#userSurname').on('change', function (e) {
+		//alert("Selected value is: "+$("#userName").select2("data").text);
+		console.log($("#userSurname").select2("val"));
+		});*/
+	
+	/*$('#userSurname').on('select2-removed', function (e) {
+		alert("Selected value is: "+$("#userSurname").select2("data").text);
+		
+		});*/
+	
+	/*$('#userSurname').on('select2-highlight', function (e) {
+		kol ='"'+ e.choice + '"';
+		//console.log(kol.lenght);
+		});*/
+
+
+	});
+
+/*$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+	*/
+
+
+
+</script>
+
+<script id="userNameScr">
+var params = 'info=' + 'getName';
+var text = [];
+var requests = getLastName(params);
+
+text = getRequest(requests).split(',');
+//console.log(text);
+var id = 0;
+
+var object ={};
+var arrays =[];
+
+for(var i = 0; i< text.length; i++){
+ object = {
+			id: text[i],
+			text: text[i]
+ //console.log(i);
+	}
+	arrays.push(object);
+}
+//console.log(arrays);
+var kol = 0;
+$(document).ready(function() {
+	$("#userName").select2({
+	    //minimumInputLength: 1,
+	    placeholder: "Имя",
+		  allowClear: true,
+		  
+		  query: function (query) {
+		        var data = {results: []}, i, j, s;
+		            data.results.push({id: query.term, text: query.term,});
+		            kol = query.term;
+		            var s = 0;
+		            for(var j = 0; j< arrays.length; j++){
+		            	if (query.term.toLowerCase() == arrays[j].text.substring(0, kol.length).toLowerCase() ){
+		            		var temp = arrays[s];
+		            		arrays[s] = arrays[j];
+		            		arrays[j] = temp;
+		            		s++;
+		            	}
+		            }
+		            
+		            for(var j = 0; j< arrays.length; j++){	            	
+		            	data.results.push(arrays[j]);
+		            	
+		            }
+		                  
+		        query.callback(data);
+		        
+		    }
+
+		});
+	
+	/*$('#userName').on('change', function (e) {
+		alert("Selected value is: "+$("#userName").select2("data").text);
+
+		});*/
+
+	});
+
+/*$('#userName').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+*/
+</script>
+
+<script id="userPatronomicScr">	
+var params = 'info=' + 'getPatronomic';
+var patr = [];
+var requests = getLastName(params);
+
+patr = getRequest(requests).split(',');
+var id = 0;
+//console.log(text);
+var objectPatr ={};
+var arrayPatr =[];
+
+for(var i = 0; i< patr.length; i++){
+ objectPatr = {
+			id:  patr[i],
+			text: patr[i]
+	}
+	arrayPatr.push(objectPatr);
+}
+
+var kol = 0;
+$(document).ready(function() {
+	$("#userPatronomic").select2({
+	    //minimumInputLength: 1,
+	    placeholder: "Отчество",
+		  allowClear: true,
+		  
+		  query: function (query) {
+		        var data = {results: []}, i, j, s;
+		            data.results.push({id: query.term, text: query.term,});
+		            kol = query.term;
+		            var s = 0;
+		            for(var j = 0; j< arrayPatr.length; j++){
+		            	if (query.term.toLowerCase() == arrayPatr[j].text.substring(0, kol.length).toLowerCase() ){
+		            		var temp = arrayPatr[s];
+		            		arrayPatr[s] = arrayPatr[j];
+		            		arrayPatr[j] = temp;
+		            		s++;
+		            	}
+		            }
+		            
+		            for(var j = 0; j< arrayPatr.length; j++){	            	
+		            	data.results.push(arrayPatr[j]);
+		            }
+		                  
+		        query.callback(data);
+		        
+		    }
+
+		});
+	
+	/*$('#userPatronomic').on('change', function (e) {
+		alert("Selected value is: "+$("#userPatronomic").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userPatronomicы').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="workIdScr">	
+$(document).ready(function() {
+	$("#workId").select2({
+	   // minimumInputLength: 1,
+	    placeholder: "Номер карты",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	            //data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#workId').on('change', function (e) {
+		alert("Selected value is: "+$("#workId").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="tableNumberScr">	
+$(document).ready(function() {
+	$("#tableNumber").select2({
+	   // minimumInputLength: 1,
+	    placeholder: "Табельный номер",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	           // data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#tableNumber').on('change', function (e) {
+		alert("Selected value is: "+$("#tableNumber").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="departamentScr">
+
+var params = 'info=' + 'getDepar';
+var text = [];
+var requests = getLastName(params);
+
+text = getRequest(requests).split(',');
+var id = 0;
+
+var object ={};
+var array =[];
+
+for(var i = 0; i< text.length; i++){
+ object = {
+			id:  text[i],
+			text: text[i]
+	}
+	array.push(object);
+}
+
+var kol = 0;
+
+$(document).ready(function() {
+	$("#departament").select2({
+	    placeholder: "Отдел",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+            data.results.push({id: query.term, text: query.term,});
+            kol = query.term;
+            var s = 0;
+            for(var j = 0; j< array.length; j++){
+            	if (query.term.toLowerCase() == array[j].text.substring(0, kol.length).toLowerCase() ){
+            		var temp = array[s];
+            		array[s] = array[j];
+            		array[j] = temp;
+            		s++;
+            	}
+            }
+            
+            for(var j = 0; j< array.length; j++){	            	
+            	data.results.push(array[j]);
+            }
+                  
+        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#departament').on('change', function (e) {
+		alert("Selected value is: "+$("#departament").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="positionScr">	
+$(document).ready(function() {
+	$("#position").select2({
+	   // minimumInputLength: 1,
+	    placeholder: "Должность",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	            //data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#position').on('change', function (e) {
+		alert("Selected value is: "+$("#position").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="birthdayScr">	
+$(document).ready(function() {
+	$("#birthday").select2({
+	    //minimumInputLength: 1,
+	    placeholder: "День рождения",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	           // data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#birthday').on('change', function (e) {
+		alert("Selected value is: "+$("#birthday").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="soundScr">	
+$(document).ready(function() {
+	$("#sound").select2({
+	    //minimumInputLength: 1,
+	    placeholder: "Звук при входе",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	           // data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#sound').on('change', function (e) {
+		alert("Selected value is: "+$("#sound").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="typeWorkingHourScr">	
+$(document).ready(function() {
+	$("#typeWorkingHour").select2({
+	    //minimumInputLength: 1,
+	    placeholder: "Тип рабочего времени",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	           // data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#typeWorkingHour').on('change', function (e) {
+		alert("Selected value is: "+$("#typeWorkingHour").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+<script id="idInTableScr">	
+$(document).ready(function() {
+	$("#idInTable").select2({
+	    //minimumInputLength: 1,
+	    placeholder: "Номер записи",
+		  allowClear: true,
+		  
+	    query: function (query) {
+	        var data = {results: []}, i, j, s;
+	     
+	            data.results.push({id: query.term, text: query.term,});
+	            //data.results.push ({id: 0, text: 'story'},{id: 1, text: 'bug'},{id: 2, text: 'task'});
+	        
+	        query.callback(data);
+	        
+	    }
+
+	});
+	
+	/*$('#idInTable').on('change', function (e) {
+		alert("Selected value is: "+$("#idInTable").select2("data").text);
+
+		});*/
+
+	});
+
+$('#userSurname').on('change', function (e) {
+	alert("Selected value is: "+$("#e5").select2("val"));
+
+	});
+
+</script>
+
+    <script id ="statusInTable">
+        $(document).ready(function() { 
+        	$("#status").select2({
+            	placeholder: "Статус",
+            	allowClear: true,
+            	  data: [{id: 0, text: 'Работает'},{id: 1, text: 'Уволен'}]
+        	}); 
+        });
+    </script>
+
+
+
+<body>
+	<form >
+			<div class ="addWorker">
+	<font size="5" color="black" face="Arial">Добавить/изменить работника</font>
+		</div>
+
+    			<div class ="surn">
+					Введите фамилию сотрудника:
+					</div>
+				<div class ="surnINP">     
+					<input type="hidden" id="userSurname" style="width:200px"/>
+				</div>
+				
+				<div class = "name" >
+					Введите имя сотрудника:
+					</div>
+					<div class = "nameINP" >
+						<input type="hidden" id="userName" style="width:200px"/>
+					</div>
+
+				<div class = "patron">
+					Введите отчество сотрудника:
+				</div> 
+					<div class = "patronINP">
+						<input type="hidden" id="userPatronomic" style="width:200px"/>
+					</div>
+
+    
+    			<div class = "workerId"  >
+					Введите id сотрудника: 
+				</div>
+					<div class = "workerIdINP"  >
+						<input type="hidden" id="workId" style="width:200px"/>
+					</div>	
+				
+				<div class = "typeCard">
+					Выберите формат ключа:
+				</div>
+				<div class = "typeCardInp">
+						<input name="typeCards" type="radio" value="hex4" checked> Hex-4b
+						<input name="typeCards" type="radio" value="hex5"> Hex-5b
+    					<input name="typeCards" type="radio" value="dec"> Dec
+				</div>
+				
+				
+				<div class = "tablenum">
+					Введите табельный номер: 
+				</div>
+					<div class = "tablenumINP">
+						<input type="hidden" id="tableNumber" style="width:200px"/>
+					</div>
+
+				<div class = "depart" >
+					Введите отдел сотрудника:
+				</div> 
+					<div class = "departINP" >
+						<input type="hidden" id="departament" style="width:200px"/>
+					</div>
+				
+				<div class = "position" >
+					Введите должность сотрудника:
+				</div> 
+					<div class = "positionINP" >
+						<input type="hidden" id="position" style="width:200px"/>
+					</div>
+				
+				<div class = "birth"  >
+					Введите день рождения:
+				</div>
+					<div class = "birthINP"  >
+						<input type="hidden" id="birthday" style="width:200px"/>
+					</div>
+
+				<div class = "sound" >
+					Введите звук входа сотрудника:
+				</div>
+					<div class = "soundINP" >
+						<input type="hidden" id="sound" style="width:200px"/>
+					</div>
+				
+				<div class = "status" >
+					Введите статус сотрудника:
+				</div>
+					<div class = "statusINP" >
+					<!-- <select size="1"  id="status" style="width:200px"  required>
+    					<option disabled selected>Выберите статус</option>
+    					<option value="work">Работает</option>
+    					<option value="dismissed">Уволен</option>
+   					</select> -->
+   					<input type="hidden" id="status" style="width:200px"/>
+				</div>
+				
+				<div class = "typeWorkingHour" >
+					Введите тип рабочего времени:
+				</div>
+				<div class = "typeWorkingHourINP" >
+					<input type="hidden" id="typeWorkingHour" style="width:200px"/>
+				</div>
+				
+				<div class = "idInTablePre" >
+					Для изменения информации о работнике введите id
+				</div>
+				<div class = "idInTable" >
+				 Введите id записи:
+				</div>
+				<div class = "idInTableINP" >
+					<input type="hidden" id="idInTable" style="width:200px"/>
+				</div>
+		
+						
+				 <div class = "layer2">
+					<input  type="button"  id= "addWorkBut" value="Добавить работника" /> 
+				</div>
+				
+				<div class = "layer4">
+					<input  type="button"  id= "showTable" value="Вывести таблицу работников" /> 
+				</div>
+				
+				<div class = "layer6">
+					<input  type="button"  id= "editWorker" value="Изменить информацию о работнике" /> 
+				</div>
+				
+	<div class = "departEdit">				
+		<font size="5" color="black" face="Arial">Добавить/изменить отдел</font>				
+	</div>
+	
+			<div class ="nameDep">
+					Введите название отдела:
+					</div>
+				<div class ="nameDepINP">     
+					<input type="nameDepart" name="nameDepart">
+				</div>
+				
+				<div class = "typeWorkTime" >
+					Введите тип рабочего времени:
+					</div>
+					<div class = "typeWorkTimeINP" >
+					 <input type="typeWorkTimeDepart" name="typeWorkTimeDepart">
+				</div>
+				
+				<div class = "idDeparInTablePre" >
+					Для изменения информации об отделе введите id
+				</div>
+				<div class = "idDeparInTable" >
+				 Введите id записи:
+				</div>
+				<div class = "idDeparInTableINP" >
+					 <input type="id" name="idDepInTable">
+				</div>
+				
+				<div class = "addDepBut">
+					<input  type="button"  id= "addDepBut" value="     Добавить отдел      " /> 
+				</div>
+				
+				<div class = "showTableDepar">
+					<input  type="button"  id= "showTableDepar" value="Вывести таблицу отделов и типы рабочего времени" /> 
+				</div>
+				
+				<div class = "editDeparInfo">
+					<input  type="button"  id= "editDeparInfo" value="Изменить информацию об отделе" /> 
+				</div>
+				
+				
+	<div class = "workHourEdit">				
+		<font size="5" color="black" face="Arial">Добавить/изменить тип рабочего </font>				
+	</div>
+	<div class = "workHourEditDop">				
+		<font size="5" color="black" face="Arial"> времени</font>				
+	</div>
+	
+			<div class ="startWorkHour">
+					Введите начало рабочего дня:
+					</div>
+				<div class ="startWorkHourINP">     
+					<input type="startWorkHour" name="startWorkHour">
+				</div>
+				
+				<div class = "finishWorkHour" >
+					Введите конец рабочего дня:
+				</div>
+				<div class = "finishWorkHourINP" >
+					 <input type="finishWorkHour" name="finishWorkHour">
+				</div>
+				
+				<div class ="dinnerStart">
+					Введите начало обеда:
+					</div>
+				<div class ="dinnerStartINP">     
+					<input type="dinnerStart" name="dinnerStart">
+				</div>
+				
+				<div class = "dinnerFinish" >
+					Введите конец обеда:
+					</div>
+					<div class = "dinnerFinishINP" >
+					 <input type="dinnerFinish" name="dinnerFinish">
+				</div>
+				
+				<div class = "idWorkHourInTablePre" >
+					Для изменения информации о типе рабочего времени 
+				</div>
+				<div class = "idWorkHourInTable" >
+				 введите id записи:
+				</div>
+				<div class = "idWorkHourInTableINP" >
+					 <input type="id" name="idWorkHourInTable">
+				</div>
+				
+				<div class = "addWorkHourBut">
+					<input  type="button"  id= "addWorkHourBut" value="Добавить тип рабочего времени" /> 
+				</div>
+				
+				<div class = "showTableWorkHour">
+					<input  type="button"  id= "showTableWorkHour" value="Вывести таблицу типов рабочего времени" /> 
+				</div>
+				
+				<div class = "editWorkHourInfo">
+					<input  type="button"  id= "editWorkHourInfo" value="Изменить информацию о рабочем времени" /> 
+				</div>	
+				
+				
+	<div class = "authorEdit">				
+		<font size="5" color="black" face="Arial">Добавить/изменить пользователя</font>				
+	</div>
+	
+			<div class ="nameAuthor">
+					Введите логин пользователя:
+					</div>
+				<div class ="nameAuthorINP">     
+					<input type="nameAuthor" name="nameAuthor">
+				</div>
+				
+				<div class = "paswordAuthor" >
+					Введите пароль пользователя:
+					</div>
+					<div class = "paswordAuthorINP" >
+					 <input type="paswordAuthor" name="paswordAuthor">
+				</div>
+				
+				<div class = "roleUserAuthor" >
+					Введите роль пользователя:
+				</div>
+				<div class = "roleUserAuthorINP" >
+					 <input type="id" name="roleUserAuthor">
+				</div>	
+				
+				<div class = "addAuthorBut">
+					<input  type="button"  id= "addAuthorBut" value="Добавить пользователя" /> 
+				</div>	
+				<div class = "showTableAuthor">
+					<input  type="button"  id= "showTableAuthor" value="Вывести таблицу пользователей" /> 
+				</div>
+				
+				<div class = "editAuthorInfo">
+					<input  type="button"  id= "editAuthorInfo" value="Изменить информацию о пользователе" /> 
+				</div>		
+				
+								
+				
+				
+				
+	<div class = "layer5" id = "result"></div>
+	<script src="ajax.js"></script>
+	<script src="selectJs.js"></script>
+	
+	</form>
+	
+	
+
+</body>
+</html>
