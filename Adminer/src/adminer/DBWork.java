@@ -5,9 +5,9 @@ import java.sql.*;
 
 public class DBWork {
 	
-    private final String user = /*"root"*/ /*"root"*/ "passagesys";
-    private final String url = "jdbc:mysql://localhost/passage_system?useUnicode=true&characterEncoding=UTF-8";
-    private final String password =/*"serverps"*//*"valdistroer"*/"AstZhq4";
+	private final String user = /*"root"*/"root"/*"passagesys"*/;
+    private final String url = "jdbc:mysql://localhost:3306/passage_system?useUnicode=true&characterEncoding=UTF-8";
+    private final String password =/*"serverps"*/"valdistroer"/*"AstZhq4"*/;
 
     private Connection connection;
     private Statement statement;
@@ -340,11 +340,37 @@ public class DBWork {
     		}	
     		
     		if(sound.equals("")  && isThere == 0 ) {
+    			//System.out.println("I'm here");
+    			String soundName = " SELECT soundInSound FROM soundAndName WHERE nameSound =" + "\"" + name.replaceAll("\n","") + "\"";
+    			String soundInTable = new String();
+    			int haveSound = 0;
+            	try{
+        	        connection = DriverManager.getConnection(url, user, password);
+        	        statement = connection.createStatement();
+        	        resultSet = statement.executeQuery(soundName);;
+        	        while (resultSet.next()) {
+        	        	soundInTable = resultSet.getString("soundInSound");
+        	        	haveSound++;
+        	        }
+
+            	}catch (SQLException e) {
+
+                } finally {
+                    closeDB();
+                }
+    			if (haveSound == 0) {
     			String queryWorkSound = "INSERT INTO sound VALUES(" + 
     		    		"\"" +  tableNum.replaceAll("\n","") + "\""  + "," +
     		    		"\"" +"nullsound" + "\"" +  ");" ;
     		    		
     		       sendQuery(queryWorkSound);
+    			}else {
+    				String queryWorkSound = "INSERT INTO sound VALUES(" + 
+        		    		"\"" +  tableNum.replaceAll("\n","") + "\""  + "," +
+        		    		"\"" +soundInTable + "\"" +  ");" ;
+        		    		
+        		       sendQuery(queryWorkSound);
+    			}
     		}
     		
     		
