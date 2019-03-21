@@ -124,6 +124,68 @@ window.onload = function(){
 		ajaxPost(params);
 	}
 	
+	/*информация об отпусках/больничных*/
+	
+	var inp_calStart = document.querySelector('input[name = calendarStart]');
+	var inp_calFin = document.querySelector('input[name = calendarFin]');
+	
+	document.querySelector('#addAbsenseBut').onclick = function(){
+		var reasonForAbsenceINP;
+		if ($("#reasonForAbsenceINP").select2("val")== ""){
+			reasonForAbsenceINP = $("#reasonForAbsenceINP").select2("val");
+		}
+		else {
+			reasonForAbsenceINP = $("#reasonForAbsenceINP").select2("data").text;
+		}
+		
+		
+		var params = 'fioEmpl=' + $("#fioEmployeeINP").select2("val") + 
+		'&' + 'dateAbsenceStart=' + inp_calStart.value + 
+		'&' + 'dateAbsenceFin=' + inp_calFin.value + 
+		'&' + 'typeOfAbsence=' + reasonForAbsenceINP + 
+		'&' + 'info=' + 'addAbsence';
+		ajaxPost(params);
+	}
+	
+	document.querySelector('#showTableAbsence').onclick = function(){
+		var status;
+		if ($("#reasonForAbsenceINP").select2("val")== ""){
+			status = $("#reasonForAbsenceINP").select2("val");
+		}
+		else {
+			status = $("#reasonForAbsenceINP").select2("data").text;
+		}
+		
+	
+		
+		var params = 'fioEmpl=' + $("#fioEmployeeINP").select2("val") + 
+		'&' + 'dateAbsenceStart=' + inp_calStart.value + 
+		'&' + 'dateAbsenceFin=' + inp_calFin.value + 
+		'&' + 'typeOfAbsence=' + reasonForAbsenceINP + 
+		'&' + 'info=' + 'showAbsence';
+		ajaxPost(params);
+	}
+	
+	document.querySelector('#editAbsenceInfo').onclick = function(){
+		var reasonForAbsenceINP;
+		if ($("#reasonForAbsenceINP").select2("val")== ""){
+			reasonForAbsenceINP = $("#reasonForAbsenceINP").select2("val");
+		}
+		else {
+			reasonForAbsenceINP = $("#reasonForAbsenceINP").select2("data").text;
+		}
+		
+		
+		var params = 'fioEmpl=' + $("#fioEmployeeINP").select2("val") + 
+		'&' + 'dateAbsenceStart=' + inp_calStart.value + 
+		'&' + 'dateAbsenceFin=' + inp_calFin.value + 
+		'&' + 'typeOfAbsence=' + reasonForAbsenceINP + 
+		'&' + 'idOfAbsence=' + $("#idInTableDiseaseInp").select2("val") +
+		'&' + 'info=' + 'editAbsence';
+		ajaxPost(params);
+	}
+	
+	
 	
 	/*отправить онформацию об отделе*/
 	
@@ -133,16 +195,16 @@ window.onload = function(){
 	var inp_idDepInTable = document.querySelector('input[name = idDepInTable]');
 	
 	document.querySelector('#addDepBut').onclick = function(){
-		var params = 'nameDepart=' + inp_nameDepart.value + 
-		'&' +'typeWorkTimeDepart=' + inp_typeWorkTimeDepart.value + 
+		var params = 'nameDepart=' + $("#departamentWind").select2("val") + 
+		'&' +'typeWorkTimeDepart=' + $("#typeWorkHourWind").select2("val")+ 
 		'&' + 'info=' + 'addDepBut';
 		ajaxPost(params);
 	}
 	
 	document.querySelector('#editDeparInfo').onclick = function(){
-		var params = 'nameDepart=' + inp_nameDepart.value + 
-		'&' +'typeWorkTimeDepart=' + inp_typeWorkTimeDepart.value + 
-		'&' +'idDepInTable=' + inp_idDepInTable.value +
+		var params = 'nameDepart=' +  $("#departamentWind").select2("val") + 
+		'&' +'typeWorkTimeDepart=' + $("#typeWorkHourWind").select2("val") + 
+		'&' +'idDepInTable=' + $("#idInTableDepar").select2("val") +
 		'&' + 'info=' + 'editDeparInfo';
 		ajaxPost(params);
 	}
@@ -161,20 +223,20 @@ window.onload = function(){
 	var inp_idWorkHourInTable = document.querySelector('input[name = idWorkHourInTable]');
 	
 	document.querySelector('#addWorkHourBut').onclick = function(){
-		var params = 'startWorkHour=' + inp_startWorkHour.value + 
-		'&' +'finishWorkHour=' + inp_finishWorkHour.value + 
-		'&' +'dinnerStart=' + inp_dinnerStart.value +
-		'&' +'dinnerFinish=' + inp_dinnerFinish.value +
+		var params = 'startWorkHour=' + $("#startTimeWorkINP").select2("val") + 
+		'&' +'finishWorkHour=' + $("#finishTimeWorkINP").select2("val") + 
+		'&' +'dinnerStart=' + $("#startTimeLanchINP").select2("val") +
+		'&' +'dinnerFinish=' + $("#finishTimeLanchINP").select2("val") +
 		'&' + 'info=' + 'addWorkHourBut';
 		ajaxPost(params);
 	}
 	
 	document.querySelector('#editWorkHourInfo').onclick = function(){
-		var params = 'startWorkHour=' + inp_startWorkHour.value + 
-		'&' +'finishWorkHour=' + inp_finishWorkHour.value +
-		'&' +'dinnerStart=' + inp_dinnerStart.value +
-		'&' +'dinnerFinish=' + inp_dinnerFinish.value +
-		'&' +'idWorkHourInTable=' + inp_idWorkHourInTable.value +
+		var params = 'startWorkHour=' + $("#startTimeWorkINP").select2("val") + 
+		'&' +'finishWorkHour=' + $("#finishTimeWorkINP").select2("val") + 
+		'&' +'dinnerStart=' + $("#startTimeLanchINP").select2("val") +
+		'&' +'dinnerFinish=' + $("#finishTimeLanchINP").select2("val") +
+		'&' +'idWorkHourInTable=' +  $("#idTimeHourWorkINP").select2("val") +
 		'&' + 'info=' + 'editWorkHourInfo';
 		ajaxPost(params);
 	}

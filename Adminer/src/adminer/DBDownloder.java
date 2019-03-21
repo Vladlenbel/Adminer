@@ -52,6 +52,16 @@ public class DBDownloder extends HttpServlet {
 			response.setContentType("text/html; charset=UTF-8");
 		    response.getWriter().println(database.getDepar("title"));
 		}
+		if ( info.equals("getTypeOfWorkHour") ) {
+			//System.out.println("patronymic");
+			response.setContentType("text/html; charset=UTF-8");
+		    response.getWriter().println(database.getTypeOfWorkHour());
+		}
+		if ( info.equals("getFIO") ) {
+			//System.out.println("patronymic");
+			response.setContentType("text/html; charset=UTF-8");
+		    response.getWriter().println(database.getFIO());
+		}
 	}
 
 	/**

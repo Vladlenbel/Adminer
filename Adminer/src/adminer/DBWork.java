@@ -1,6 +1,10 @@
 package adminer;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+
 
 
 public class DBWork {
@@ -299,6 +303,8 @@ public class DBWork {
     	if (birthday.equals("")) {
     		birthday = "null";
     	}
+    	
+    	
     	String queryWorkFIO = "INSERT INTO workerfio ( workerIdCard, personellNumber," + 
     			"surname, name, patronymic, birthday, status, typeWorkingHour, department, position)  VALUES("  + 
     			"\""+  idCard.replaceAll("\n","") + "\""  + "," +
@@ -527,13 +533,14 @@ public class DBWork {
     				isFirst++;
     			}
     			
+    			if (name.equals("") == false && isFirst == 1 ) {
+    				queryWorkFIO += "," + "name =" + "\"" + name.replaceAll("\n","") + "\"" ;
+    			}
     			if (name.equals("") == false && isFirst == 0 ) {
     				queryWorkFIO += "name =" + "\"" + name.replaceAll("\n","") + "\""  ;
     				isFirst++;
     			}
-    			if (name.equals("") == false && isFirst == 1 ) {
-    				queryWorkFIO += "," + "name =" + "\"" + name.replaceAll("\n","") + "\"" ;
-    			}
+    			
     			
     			if (patronomic.equals("") == false && isFirst == 1 ) {
     				queryWorkFIO += "," + "patronymic =" + "\"" + patronomic.replaceAll("\n","") + "\"";
@@ -625,6 +632,7 @@ public class DBWork {
 	"\"" + typeWorkTime.replaceAll("\n","") + "\"" +  ");" ;
 	
     		sendQuery(queryNewDep);
+    	//	showTableDepar();
     }
     
     public void editDeparInfo (String title, String typeWorkTime, String idInTable) {
@@ -706,19 +714,22 @@ public class DBWork {
     		String dinnerStart, String dinnerFinish, String idWorkHourInTable) {
     	
     	int isFirst = 0;
-    	String queryWorkingHour = "UPDATE  workingHours SET ";
-    			if (startWorkHour.equals("")) {
+    	String queryWorkingHour = "UPDATE workingHours SET ";
+    			if (startWorkHour.equals("") == false) {
     				queryWorkingHour +="startWorkTime =" + "\"" +  startWorkHour.replaceAll("\n","") + "\"";
+    				isFirst++;
     			}
-    			if ( finishWorkHour.equals("") && isFirst == 0 ) {
+    			if ( finishWorkHour.equals("") == false && isFirst == 0 ) {
     				queryWorkingHour += "finishWork =" + "\"" + finishWorkHour.replaceAll("\n","") + "\"";
+    				isFirst++;
     			}
-    			if ( finishWorkHour.equals("") && isFirst == 1 ) {
+    			if ( finishWorkHour.equals("") == false && isFirst == 1 ) {
     				queryWorkingHour += "," + "finishWork =" + "\"" + finishWorkHour.replaceAll("\n","") + "\"";
     			}
     			
     			if (dinnerStart.equals("") == false && isFirst == 0 ) {
     				queryWorkingHour +="dinnerStart =" + "\"" + dinnerStart.replaceAll("\n","") + "\"";
+    				isFirst++;
     			}
     			if (dinnerStart.equals("") == false && isFirst == 1 ) {
     				queryWorkingHour += "," + "dinnerStart =" + "\"" + dinnerStart.replaceAll("\n","") + "\"";
@@ -726,6 +737,7 @@ public class DBWork {
     			
     			if (dinnerFinish.equals("") ==false && isFirst == 0 ) {
     				queryWorkingHour += "dinnerFinish =" + "\"" + dinnerFinish.replaceAll("\n","") + "\"";
+    				isFirst++;
     			}
     			if (dinnerFinish.equals("") ==false && isFirst == 1 ) {
     				queryWorkingHour += "," + "dinnerFinish =" + "\"" + dinnerFinish.replaceAll("\n","") + "\"";
@@ -734,6 +746,7 @@ public class DBWork {
 	
     	//System.out.println(queryWorkingHour);
     		sendQuery(queryWorkingHour);
+    		//showTableWorkHour();
     }
    
     public String showTableWorkHour() {
@@ -818,7 +831,7 @@ public class DBWork {
     }
     
     public String getDepar(String request) {
-        
+    	System.out.println("I'm hereDep");
     	String answ = new String();
     	String query = "SELECT * FROM department;";
     	
@@ -844,6 +857,293 @@ public class DBWork {
     	
    // System.out.println(answ);
     return answ;
+    }
+    
+    public String getTypeOfWorkHour() {
+    	System.out.println("I'm here");
+    	String answ = new String();
+    	String query = "SELECT * FROM workingHours;";
+    	
+    	try{
+	        connection = DriverManager.getConnection(url, user, password);
+	        statement = connection.createStatement();
+	        resultSet = statement.executeQuery(query);;
+	        int kol = 0;
+	        while (resultSet.next()) {        	
+	        	
+	        	if (kol != 0) {
+	        		answ += ",";
+	        	}
+	        	   answ += resultSet.getString("id");
+	        	   kol++;     	
+	        }
+	        
+    	}catch (SQLException e) {
+
+        } finally {
+            closeDB();
+        }
+    	
+   // System.out.println(answ);
+    return answ;
+    	
+    }
+    
+    public String getFIO() {
+ 	   
+ 	   	String fio = new String();
+ 	   	int index = 0;
+ 	   	String query = "SELECT *  FROM workerfio WHERE surname != \"Unknown\";";
+ 	   	try{
+ 		        connection = DriverManager.getConnection(url, user, password);
+ 		        statement = connection.createStatement();
+ 		        resultSet = statement.executeQuery(query);
+ 		        int kol = 0;
+ 		        while (resultSet.next()) {
+ 		        	if (kol != 0) {
+ 		        		fio += ",";
+ 		        	}
+ 		        	fio+= resultSet.getString("surname");
+ 		        	fio+= " ";
+ 		        	fio+= resultSet.getString("name");
+ 		        	fio+= " ";
+ 		        	fio+= resultSet.getString("patronymic");
+ 		        	   kol++;
+ 		        }
+ 		        	
+ 	   	}catch (SQLException e) {
+
+ 	       } finally {
+ 	           closeDB();
+ 	       } 
+
+ 	   	return fio;
+ 	   }
+    
+    
+    public void addVacation (String fio, String dateStart, 
+    		String dateFinish, String typeOfAbsence) {
+    	
+    	String[] surname = fio.split("\\s+");
+    	
+    	
+    	String queryToKnowPersNum = "SELECT personellNumber FROM workerfio WHERE surname = "; 
+    			queryToKnowPersNum +=  "\"" + surname[0].replaceAll("\n","") + "\"";
+    			queryToKnowPersNum += "AND name =" + "\"" + surname[1].replaceAll("\n","") + "\"";
+    			queryToKnowPersNum += "AND patronymic =" + "\"" + surname[2].replaceAll("\n","") + "\""+ ";";
+    	//System.out.println(queryWorkingHour);
+    	//sendQuery(queryToKnowPersNum);
+    			String personellNumberEmpl = new String();
+    			try{
+     		        connection = DriverManager.getConnection(url, user, password);
+     		        statement = connection.createStatement();
+     		        resultSet = statement.executeQuery(queryToKnowPersNum);
+     		        int kol = 0;
+     		        while (resultSet.next()) {
+     		        	personellNumberEmpl =  resultSet.getString("personellNumber");
+      		        }
+     		        	
+     	   	}catch (SQLException e) {
+
+     	       } finally {
+     	           closeDB();
+     	       } 
+    			
+    			changeStatusWorker(dateStart, dateFinish, typeOfAbsence, personellNumberEmpl);
+    		
+    			String queryInsertAbsence = "INSERT INTO vacation (personellNumber, startVacation," + 
+    	    			"finishVacation, typeOfAbsence) VALUES("  + 
+    	    			"\""+  personellNumberEmpl.replaceAll("\n","") + "\""  + "," +
+    					"\"" + dateStart.replaceAll("\n","") + "\"" +  "," + 
+    	    			"\"" + dateFinish.replaceAll("\n","") + "\"" +  "," +
+    					"\"" + typeOfAbsence.replaceAll("\n","") + "\""  +");"; 
+    	    	//System.out.println(queryWorkingHour);
+    	    	sendQuery(queryInsertAbsence);
+
+    }
+    
+    public String showTableVacation(String dateStart, String dateFin) {
+    	
+        
+    	String answ = new String();
+    	String query = "SELECT * FROM vacation inner join workerfio"
+    			+ " ON vacation.personellNumber = workerfio.personellNumber "
+    			+ "WHERE startVacation >=";
+    		
+    		if (dateStart.equals("") == false) {
+    			
+    			query +=  "\"" + dateStart.replaceAll("\n","") + "\"";
+    			if(dateFin.equals("") == false) {
+    				query += "AND startVacation <=" + "\"" + dateFin.replaceAll("\n","") + "\"";
+    				 query += "or (finishVacation >= " +  "\"" + dateStart.replaceAll("\n","") + "\""
+      		    		   + "AND finishVacation <=" +"\"" + dateFin.replaceAll("\n","") + "\"" + ")";
+      		       query += "or (startVacation <="  +  "\"" + dateStart.replaceAll("\n","") +  "\""
+      		    		   +"AND finishVacation >=" +"\"" + dateFin.replaceAll("\n","") + "\""+ ")";
+      		    		   
+    			}
+    		}else {
+    			   SimpleDateFormat dateFormat = new SimpleDateFormat("YYYY-MM"); //HH:mm:ss");
+    		       String curDate = dateFormat.format(new Date());
+    		       String curDateStart = curDate+ "-01";
+    		       String curDateFin = curDate+"-31";
+    		       query +=  "\"" + curDateStart.replaceAll("\n","") + "\"";
+    		       query += "AND  startVacation <=" + "\"" + curDateFin.replaceAll("\n","") + "\"";
+    		       query += "or (finishVacation >= " +  "\"" + curDateStart.replaceAll("\n","") + "\""
+    		    		   + "AND finishVacation <=" +"\"" + curDateFin.replaceAll("\n","") + "\"" + ")";
+    		       query += "or (startVacation <="  +  "\"" + curDateStart.replaceAll("\n","") +  "\""
+    		    		   +"AND finishVacation >=" +"\"" + curDateFin.replaceAll("\n","") + "\""+ ")";
+    		    		   
+    		       
+    		}
+    //	System.out.println(query);
+    	try{
+	        connection = DriverManager.getConnection(url, user, password);
+	        statement = connection.createStatement();
+	        resultSet = statement.executeQuery(query);;
+	      //  answ += "<html><head><meta charset= \"UTF-8\" ></head>";
+	        answ += "<table border= \" 1\">"+  
+	        		   "<tr>"+ 
+	        		   "<th>ID записи</th>" +
+	        		   "<th>ФИО сотрудника</th>" + 
+	        		   "<th>Начало периода</th>"+ 
+	        		   "<th>Конец периода</th>" + 
+	        		  "<th>Причина отсутствия</th>"+
+	        		  "</tr>";
+	        while (resultSet.next()) {
+	        	
+	        	
+	        	   answ += "<tr>";
+	        	   answ += "<td>"+ resultSet.getString("id") +" </td>";
+	        	   answ += "<td>"+ resultSet.getString("surname")+" "+ resultSet.getString("name")+ " " +resultSet.getString("patronymic") +" </td>";
+	        	   answ += "<td>"+ resultSet.getString("startVacation") +" </td>";
+	        	   answ += "<td>"+ resultSet.getString("finishVacation") +" </td>";
+	        	   answ += "<td>"+ resultSet.getString("typeOfAbsence") +" </td>";
+        	    
+	        	  answ += "</tr>";
+	        	
+
+	        
+	        }
+	        
+    	}catch (SQLException e) {
+
+        } finally {
+            closeDB();
+        }
+    	
+    
+    return answ;
+    }
+    
+    public void editTableVacation(String dateStart, String dateFin, String fio, String typeOfAbsence, String id) {
+    	String personellNumberEmpl  = new String();;
+    	if (fio.equals("") == false) {
+    		String[] surname = fio.split("\\s+");
+        	
+        	
+        	String queryToKnowPersNum = "SELECT personellNumber FROM workerfio WHERE surname = "; 
+        			queryToKnowPersNum +=  "\"" + surname[0].replaceAll("\n","") + "\"";
+        			queryToKnowPersNum += "AND name =" + "\"" + surname[1].replaceAll("\n","") + "\"";
+        			queryToKnowPersNum += "AND patronymic =" + "\"" + surname[2].replaceAll("\n","") + "\""+ ";";
+        	//System.out.println(queryWorkingHour);
+        	//sendQuery(queryToKnowPersNum);
+        			
+        			try{
+         		        connection = DriverManager.getConnection(url, user, password);
+         		        statement = connection.createStatement();
+         		        resultSet = statement.executeQuery(queryToKnowPersNum);
+         		        int kol = 0;
+         		        while (resultSet.next()) {
+         		        	personellNumberEmpl =  resultSet.getString("personellNumber");
+          		        }
+         		        	
+         	   	}catch (SQLException e) {
+
+         	       } finally {
+         	           closeDB();
+         	       } 
+    	}
+    	int isFirst = 0;
+    	String queryVacation = "UPDATE vacation SET ";
+    			if (dateStart.equals("") == false) {
+    				queryVacation +="startVacation =" + "\"" +  dateStart.replaceAll("\n","") + "\"";
+    				isFirst++;
+    			}
+    			
+    			if ( dateFin.equals("") == false && isFirst == 1 ) {
+    				queryVacation += "," + "finishVacation =" + "\"" + dateFin.replaceAll("\n","") + "\"";
+    			}
+    			if ( dateFin.equals("") == false && isFirst == 0 ) {
+    				queryVacation += "finishVacation =" + "\"" + dateFin.replaceAll("\n","") + "\"";
+    				isFirst++;
+    			}
+    			
+    			if ( typeOfAbsence.equals("") == false && isFirst == 1 ) {
+    				queryVacation += "," + "typeOfAbsence =" + "\"" + typeOfAbsence.replaceAll("\n","") + "\"";
+    			}
+    			if (typeOfAbsence.equals("") == false && isFirst == 0 ) {
+    				queryVacation +="typeOfAbsence =" + "\"" + typeOfAbsence.replaceAll("\n","") + "\"";
+    				isFirst++;
+    			}
+    			
+    			if (personellNumberEmpl.equals("") == false && isFirst == 1 ) {
+    				queryVacation += "," + "personellNumber =" + "\"" + personellNumberEmpl.replaceAll("\n","") + "\"";
+    			}
+    			if (personellNumberEmpl.equals("") == false && isFirst == 0 ) {
+    				queryVacation +="personellNumber =" + "\"" + personellNumberEmpl.replaceAll("\n","") + "\"";
+    				isFirst++;
+    			}
+    			   			
+    			queryVacation += "WHERE id =" + "\"" + id.replaceAll("\n","") + "\"" + ";" ;
+	
+    	System.out.println(queryVacation);
+    		sendQuery(queryVacation);
+    }
+    
+    private void changeStatusWorker(String dateStart, 
+    		String dateFinish, String typeOfAbsence, String personellNum) {
+    	
+    	String statusEmpt = new String();
+    	
+			if (typeOfAbsence.equals("Больничный")) {
+				statusEmpt = "302";
+			}
+			if (typeOfAbsence.equals("Отпуск")) {
+				statusEmpt = "301";
+			}
+			
+			String queryToShangeStatus = "SELECT * from worker where eventTime >="; 
+			queryToShangeStatus +=  "\"" + dateStart.replaceAll("\n","") + "\"";
+			queryToShangeStatus += "AND eventTime <= " + "\"" + dateFinish.replaceAll("\n","")+" 23:59:59" + "\"";
+			queryToShangeStatus += "AND workerId =" + "\"" + personellNum.replaceAll("\n","") + "\"";
+			queryToShangeStatus += "AND statuscom <= " + "\"" + 300 + "\""+ ";";
+
+			try{
+ 		        connection = DriverManager.getConnection(url, user, password);
+ 		        statement = connection.createStatement();
+ 		        resultSet = statement.executeQuery(queryToShangeStatus);
+ 		     
+ 		        while (resultSet.next()) {
+ 		        	String  sqlSafeOff = "SET SQL_SAFE_UPDATES = 0;";
+      				sendQuery(sqlSafeOff);
+      				
+      				String queryOutEarly = "update worker set statuscom =+"+ 
+      						"\"" + statusEmpt  + "\""  + "where workerId = " + 
+      						"\"" + personellNum  + "\""  + "and eventTime = " +
+	     	    				"\"" + resultSet.getString("eventTime") + "\"" +  ";" ;
+	        			//System.out.println(queryOut);
+	        			sendQuery(queryOutEarly);
+	        			
+	        			String  sqlSafeOn = "SET SQL_SAFE_UPDATES = 1;";
+      					sendQuery(sqlSafeOn);	
+  		        }
+ 		        	
+ 	   	}catch (SQLException e) {
+
+ 	       } finally {
+ 	           closeDB();
+ 	       } 
+			
     }
 }
 

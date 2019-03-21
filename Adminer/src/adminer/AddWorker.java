@@ -58,6 +58,13 @@ public class AddWorker extends HttpServlet {
 	    String typeWorkingHour = (String) request.getParameter("typeWorkingHour");
 	    String idInTable = (String) request.getParameter("idInTable");
 	    
+	    //информация об отпусках/болезнях
+	    String fioEmpl = (String) request.getParameter("fioEmpl");
+	    String dateAbsenceStart = (String) request.getParameter("dateAbsenceStart");
+	    String dateAbsenceFin = (String) request.getParameter("dateAbsenceFin");
+	    String typeOfAbsence = (String) request.getParameter("typeOfAbsence");
+	    String idOfAbsence = (String) request.getParameter("idOfAbsence");
+	    
 	    //информация об отделе
 	    String nameDepart = (String) request.getParameter("nameDepart");
 	    String typeWorkTimeDepart = (String) request.getParameter("typeWorkTimeDepart");
@@ -111,23 +118,48 @@ public class AddWorker extends HttpServlet {
 			response.getWriter().println( database.viewWorker(workId, tableNumber, 
 			    		userSurname, userName, userPatronomic, departament, position, birthday, typeCard) );
     	}
+    	
+    	// информация об отпусках/больничных
+    	if (info.equals("addAbsence")) {
+    		database.addVacation(fioEmpl, dateAbsenceStart, dateAbsenceFin, typeOfAbsence);
+    		response.setContentType("text/html; charset=UTF-8");
+		    response.getWriter().println(database.showTableVacation(dateAbsenceStart, dateAbsenceFin));
+    	}
+    	if (info.equals("showAbsence")) {
+    		response.setContentType("text/html; charset=UTF-8");
+		    response.getWriter().println(database.showTableVacation(dateAbsenceStart, dateAbsenceFin));
+    	}
+    	if (info.equals("editAbsence")) {
+    		database.editTableVacation(dateAbsenceStart, dateAbsenceFin, fioEmpl, typeOfAbsence, idOfAbsence);
+    		response.setContentType("text/html; charset=UTF-8");
+		    response.getWriter().println(database.showTableVacation(dateAbsenceStart, dateAbsenceFin));
+    	}
+    	
     	//информация об отделах
 	    	if (info.equals("addDepBut")) {
 	    		database.addNewDepartment(nameDepart, typeWorkTimeDepart);
+	    		response.setContentType("text/html; charset=UTF-8");
+			    response.getWriter().println(database.showTableDepar());
 	    	}
 	    	if (info.equals("editDeparInfo")) {
 	    		database.editDeparInfo(nameDepart, typeWorkTimeDepart, idDepInTable);
+	    		response.setContentType("text/html; charset=UTF-8");
+			    response.getWriter().println(database.showTableDepar());
 	    	}
 	    	if (info.equals("showTableDepar")) {
 	    		response.setContentType("text/html; charset=UTF-8");
 			    response.getWriter().println(database.showTableDepar());
 	    	}
-    	//информация о типах раюочего времени
+    	//информация о типах рабочего времени
 		    	if (info.equals("addWorkHourBut")) {
 		    		database.addWorkHourBut(startWorkHour, finishWorkHour, dinnerStart, dinnerFinish);
+		    		response.setContentType("text/html; charset=UTF-8");
+				    response.getWriter().println(database.showTableWorkHour());
 				}
 				if (info.equals("editWorkHourInfo")) {
 					database.editWorkHourInfo(startWorkHour, finishWorkHour, dinnerStart, dinnerFinish, idWorkHourInTable);
+					response.setContentType("text/html; charset=UTF-8");
+				    response.getWriter().println(database.showTableWorkHour());
 				}
 				if (info.equals("showTableWorkHour")) {
 					response.setContentType("text/html; charset=UTF-8");
